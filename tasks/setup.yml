@@ -10,18 +10,31 @@
   when:
     "syncthing_manage_user"
 
-- name: Add syncthing repository key
-  apt_key:
-    id: "{{syncthing_apt_key_id}}"
-    url: "{{syncthing_apt_key_url}}"
-    keyring: "{{syncthing_apt_key_path}}"
+- name: Download syncthing apt repository key
+  get_url:
+    url: "{{ syncthing_apt_key_url }}"
+    dest: "{{ syncthing_apt_key_path }}"
+    mode: '0644'
 
-- name: Add syncthing repository
+- name: Ensure apt signing tools are installed
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - ca-certificates
+    state: present
+    update_cache: yes
+
+- name: Add syncthing apt repository
   apt_repository:
-    repo: "{{syncthing_apt_repository}}"
+    repo: >
+      deb [signed-by={{ syncthing_apt_key_path }}]
+      https://apt.syncthing.net/ syncthing stable-v2
+    state: present
+    filename: syncthing
 
 - name: Install syncthing package
   apt:
+    update_cache: true
     name: syncthing
 
 - name: Copy syncthing systemd service
