@@ -5,8 +5,8 @@
     dest="{{syncthing_fetch_dir}}"
     fail_on_missing=yes
   with_items:
-    - ".config/syncthing/cert.pem"
-    - ".config/syncthing/key.pem"
-    - ".config/syncthing/config.xml"
-    - ".config/syncthing/https-cert.pem"
-    - ".config/syncthing/https-key.pem"
+    - ".local/state/syncthing/cert.pem"
+    - ".local/state/syncthing/key.pem"
+    - ".local/state/syncthing/config.xml"
+    - ".local/state/syncthing/https-cert.pem"
+    - ".local/state/syncthing/https-key.pem"
