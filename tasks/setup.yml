@@ -46,11 +46,45 @@
     group: "root"
     mode: "0644"
 
+- name: Set syncthing to run after network target
+  lineinfile:
+    path: "/etc/systemd/system/syncthing.service"
+    line: "After=network.target"
+    insertafter: "^\\[Unit\\]$"
+
 - name: Set syncthing user
   lineinfile:
     path: "/etc/systemd/system/syncthing.service"
     line: "User={{syncthing_user}}"
     regexp: "^User="
+    insertafter: "^\\[Service\\]$"
+
+- name: Set syncthing group
+  lineinfile:
+    path: "/etc/systemd/system/syncthing.service"
+    line: "Group={{syncthing_user}}"
+    regexp: "^Group="
+    insertafter: "^\\[Service\\]$"
+
+- name: Set syncthing ProtectSystem
+  lineinfile:
+    path: "/etc/systemd/system/syncthing.service"
+    line: "ProtectSystem=strict"
+    regexp: "^ProtectSystem="
+    insertafter: "^\\[Service\\]$"
+
+- name: Set syncthing PrivateTmp
+  lineinfile:
+    path: "/etc/systemd/system/syncthing.service"
+    line: "PrivateTmp=true"
+    regexp: "^PrivateTmp="
+    insertafter: "^\\[Service\\]$"
+
+- name: Set syncthing ReadWritePaths=
+  lineinfile:
+    path: "/etc/systemd/system/syncthing.service"
+    line: "ReadWritePaths=-{{ syncthing_path }}"
+    regexp: "^ReadWritePaths="
     insertafter: "^\\[Service\\]$"
 
 - name: Reload systemctl
